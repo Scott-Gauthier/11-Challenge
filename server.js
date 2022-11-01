@@ -51,12 +51,29 @@ app.post('/api/notes', (req, res) => {
             dataWrite.push(newRecord);
             console.log(dataWrite);
 
-        fs.writeFile(filename, JSON.stringify(dataWrite), (err) =>
-            err ? console.log(err) : res.json(dataWrite)
+            fs.writeFile(filename, JSON.stringify(dataWrite), (err) =>
+                err ? console.log(err) : res.json(dataWrite)
+            );
+        }
         );
-    }
-    );
     };
+});
+
+// DELETE Route for a specific note.
+app.delete('/api/notes/:id', (req, res) => {
+    const id = req.params.id;
+    const filename = path.join(__dirname, './db/db.json');
+    fs.readFile(filename, function (err, data) {
+        const dataWrite = JSON.parse([data]);
+        const result = dataWrite.filter((data) => data.id != id);        
+        console.log(result);
+
+        fs.writeFile(filename, JSON.stringify(result), (err) =>
+        err ? console.log(err) : res.json(result)
+    );
+
+    });
+
 });
 
 app.listen(PORT, () => {
